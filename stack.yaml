@@ -1,6 +1,7 @@
 resolver: lts-5.17
 packages:
   - '.'
-extra-deps: []
+extra-deps:
+  - opaleye-0.5.0.0
 flags: {}
 extra-package-dbs: []
