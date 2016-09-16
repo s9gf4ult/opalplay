@@ -46,6 +46,8 @@ ordersTable = Table "orders" $ pOrder $ Order
   , orderCreatedAt = optional "created_at"
   }
 
+data ProductTag
+
 data Product id name oid typ pid cat = Product
   { productId          :: id
   , productName        :: name
@@ -56,15 +58,15 @@ data Product id name oid typ pid cat = Product
   }
 
 type ProductColumns =
-  Product (Column PGUuid) (Column PGText) (Column (PGId OrderTag)) (Column PGText) (Column PGUuid) (Column PGTimestamptz)
+  Product (Column (PGId ProductTag)) (Column PGText) (Column (PGId OrderTag)) (Column PGText) (Column PGUuid) (Column PGTimestamptz)
 
 type ProductData =
-  Product UUID Text (Id OrderTag) Text UUID UTCTime
+  Product (Id ProductTag) Text (Id OrderTag) Text UUID UTCTime
 
 makeAdaptorAndInstance "pProduct" ''Product
 
 productsTable :: Table
-  (Product (Maybe (Column PGUuid)) (Column PGText) (Column (PGId OrderTag)) (Column PGText) (Column PGUuid) (Maybe (Column PGTimestamptz)))
+  (Product (Maybe (Column (PGId ProductTag))) (Column PGText) (Column (PGId OrderTag)) (Column PGText) (Column PGUuid) (Maybe (Column PGTimestamptz)))
   ProductColumns
 productsTable = Table "products" $ pProduct $ Product
   { productId          = optional "id"
