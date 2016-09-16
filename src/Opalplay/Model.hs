@@ -46,6 +46,36 @@ ordersTable = Table "orders" $ pOrder $ Order
   , orderCreatedAt = optional "created_at"
   }
 
+data PassengerTag
+
+data Passenger id name cat = Passenger
+  { passengerId        :: id
+  , passengerName      :: name
+  , passengerCreatedAt :: cat
+  }
+
+type PassengerColumns = Passenger
+  (Column (PGId PassengerTag))
+  (Column PGText)
+  (Column PGTimestamptz)
+
+type PassengerColumnsWrite = Passenger
+  (Maybe (Column (PGId PassengerTag)))
+  (Column PGText)
+  (Maybe (Column PGTimestamptz))
+
+type PassengerData =
+  Passenger (Id PassengerTag) Text UTCTime
+
+makeAdaptorAndInstance "pPassenger" ''Passenger
+
+passengersTable :: Table PassengerColumnsWrite PassengerColumns
+passengersTable = Table "passengers" $ pPassenger $ Passenger
+  { passengerId = optional "id"
+  , passengerName = required "name"
+  , passengerCreatedAt = optional "created_at"
+  }
+
 data ProductTag
 
 data Product id name oid typ pid cat = Product
@@ -75,4 +105,54 @@ productsTable = Table "products" $ pProduct $ Product
   , productProductType = required "product_type"
   , productProductId   = required "product_id"
   , productCreatedAt   = optional "created_at"
+  }
+
+data AirTicketProduct id name cat = AirTicketProduct
+  { airTicketProductId        :: id
+  , airTicketProductName      :: name
+  , airTicketProductCreatedAt :: cat
+  }
+
+type AirTicketProductColumns = AirTicketProduct
+  (Column PGUuid)
+  (Column PGText)
+  (Column PGTimestamptz)
+
+type AirTicketProductColumnsWrite = AirTicketProduct
+  (Maybe (Column PGUuid))
+  (Column PGText)
+  (Maybe (Column PGTimestamptz))
+
+makeAdaptorAndInstance "pAirTicketProduct" ''AirTicketProduct
+
+airTicketProductsTable :: Table AirTicketProductColumnsWrite AirTicketProductColumns
+airTicketProductsTable = Table "air_tickets" $ pAirTicketProduct $ AirTicketProduct
+  { airTicketProductId        = optional "id"
+  , airTicketProductName      = required "name"
+  , airTicketProductCreatedAt = optional "created_at"
+  }
+
+data SurchageProduct id name cat = SurchageProduct
+  { surchageProductId        :: id
+  , surchageProductName      :: name
+  , surchageProductCreatedAt :: cat
+  }
+
+type SurchageProductColumns = SurchageProduct
+  (Column PGUuid)
+  (Column PGText)
+  (Column PGTimestamptz)
+
+type SurchageProductColumnsWrite = SurchageProduct
+  (Maybe (Column PGUuid))
+  (Column PGText)
+  (Maybe (Column PGTimestamptz))
+
+makeAdaptorAndInstance "pSurchageProduct" ''SurchageProduct
+
+surchageProductsTable :: Table SurchageProductColumnsWrite SurchageProductColumns
+surchageProductsTable = Table "air_tickets" $ pSurchageProduct $ SurchageProduct
+  { surchageProductId        = optional "id"
+  , surchageProductName      = required "name"
+  , surchageProductCreatedAt = optional "created_at"
   }
